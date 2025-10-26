@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { errorHandler, notFoundHandler } = require('./src/middlewares/errorMiddleware');
 
 const mongoUrl = "mongodb+srv://massil:MassilDev@cluster0.riaqhf4.mongodb.net/";
 const AuthRouter = require('./src/routes/authRouter');
@@ -20,6 +21,9 @@ app.get("/", async(req, res)=>{
 })
 
 app.use("/auth", AuthRouter);
+
+app.use(errorHandler);
+app.use(notFoundHandler);
 
 
 
