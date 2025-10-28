@@ -1,7 +1,8 @@
 const {generateToken} = require('../middlewares/authMiddleware')
 const User = require("../models/UserModel");
+const { AppError } = require('../utils/error');
 
-const baseRegistredRole = "admin";
+const baseRegistredRole = "user";
 
 /**
  * 
@@ -13,17 +14,17 @@ const baseRegistredRole = "admin";
 const registerController = async(req , res, next) =>{
     const {username,bio,email, password, confirmPassword} = req.body;
 
-    if(!username || !bio ||!email || !password || !confirmPassword){
-       return  res.status(401).json({message:"invalid input"});
+    if(!username  ||!email || !password || !confirmPassword){
+        throw new AppError("Invalid Input", 400);
     }
 
     if (password !== confirmPassword){
-        return res.status(401).json("Invalid password");
+        throw new AppError("Invalid input", 400);
     }
 
     const existingUser = await User.findOne({$or: [{email},{username}]});
     if (existingUser){
-        return res.status(409).json({message:"User already existing"});
+        throw new AppError("User already existing", 409)
     }
 
     const role = baseRegistredRole;

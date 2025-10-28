@@ -1,19 +1,31 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const {AppError, asyncHandler} = require('./src/utils/error');
+const {logger, requestLogger, consoleLogger} = require('./src/utils/logger');
 const { errorHandler, notFoundHandler } = require('./src/middlewares/errorMiddleware');
+require('dotenv').config();
 
-const mongoUrl = "mongodb+srv://massil:MassilDev@cluster0.riaqhf4.mongodb.net/";
+
+
 const AuthRouter = require('./src/routes/authRouter');
+
+
+const app = express();
+app.use(express.json());
+app.use(consoleLogger);
+app.use(requestLogger);
+
+
+const mongoUrl = process.env.MONGODB_URL;
 
 mongoose.connect(mongoUrl,{}).then(()=>{
   console.log("MangoDB connected")
 })
 .catch((error)=>{
   console.error("MangoDB failed to connect" + error);
+  process.exit(1);
 });
 
-const app = express();
-app.use(express.json());
 
 
 app.get("/", async(req, res)=>{

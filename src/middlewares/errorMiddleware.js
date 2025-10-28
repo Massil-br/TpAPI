@@ -1,10 +1,10 @@
-//const { logger } = require('../utils/logger');
+const { logger } = require('../utils/logger');
 const { AppError } = require('../utils/error');
 
 // Middleware principal de gestion des erreurs
 const errorHandler = (err, req, res, next) => {
   // Logger l'erreur
-  //logger.error(`${req.method} ${req.originalUrl}`, err);
+  logger.error(`${req.method} ${req.originalUrl}`, err);
   
   // Déterminer le status code
   const statusCode = err.statusCode || 500;
@@ -23,9 +23,9 @@ const errorHandler = (err, req, res, next) => {
   }
   
   // En développement, ajouter la stack trace
-//   if (process.env.NODE_ENV === 'development') {
-//     response.stack = err.stack;
-//   }
+  if (process.env.NODE_ENV === 'development') {
+    response.stack = err.stack;
+  }
   
   res.status(statusCode).json(response);
 };
