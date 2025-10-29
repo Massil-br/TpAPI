@@ -87,10 +87,31 @@ const loginController = async(req, res, next) =>{
         },
         token: jwtToken,
     });
-    
+}
 
-    
 
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ * @returns 
+ */
+const profileController = async(req,res,next) =>{
+    const user = req.user;
+    console.log(user);
+
+    return res.status(200).json({
+        message:"Your profile",
+        user:{
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            bio:user.bio,
+            role:user.role,
+            createdAt: user.createdAt,
+        },
+    })
 }
 
 
@@ -98,5 +119,6 @@ const loginController = async(req, res, next) =>{
 
 module.exports = {
     registerController,
-    loginController
+    loginController,
+    profileController
 };

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
 const { AppError } = require('../utils/error');
 
-const JWT_SECRET =  "JWT_SECRET_TO_CHANGE";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const generateToken = (userId)=>{
     return jwt.sign(
@@ -21,7 +21,7 @@ const generateToken = (userId)=>{
 const authenticateUser = async(req,res,next)=>{
     try{
         const authHeader = req.headers.authorization;
-        if(!authHeader || authHeader.startsWith('Bearer ')){
+        if(!authHeader || !authHeader.startsWith('Bearer ')){
             throw new AppError("Authorization header missing or malformed", 401);
         }
 
