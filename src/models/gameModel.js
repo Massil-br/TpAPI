@@ -4,7 +4,7 @@ const ObjectId = mongoose.Schema.ObjectId;
 
 const gameSchema = new mongoose.Schema(
     {
-        name:{
+        title:{
             type: String,
             required : true,
             trim:true,
@@ -12,28 +12,34 @@ const gameSchema = new mongoose.Schema(
             maxlenghth:100,
             unique:true
         },
-        description:{
+        platform:{
             type: String,
-            required : false,
-            maxlength: 200
-        },
-        Owner:{
-            type : ObjectId,
-            ref:"User",
-            required : true
-        },
-        isBorrowed:{
-            type: Boolean,
             required : true,
-            default: false,
+            maxlength: 50
         },
-        Borrower:{
-            type: ObjectId,
+        genre:{
+            type:String,
+            require: true,
+            maxlength: 100,
+        },
+        status:{
+            type:String,
+            required:true,
+            enum:["available", "borrowed", "playing"],
+            default:"available",
+        },
+        ownerId:{
+            type: mongoose.Schema.Types.ObjectId,
             ref:"User",
+            required: true
+        },
+        borrowedBy:{
+            type : mongoose.Schema.Types.ObjectId,
+            ref:"User",
+        },
+        borrowedAt:{
+            type:Date
         }
-
-
-
     },
     {timestamps:true}
 )
