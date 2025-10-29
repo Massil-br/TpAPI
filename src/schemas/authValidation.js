@@ -20,12 +20,24 @@ const createUserValidation = [
 
     body('password')
     .notEmpty().withMessage("password  required")
-    .isLength({min:6}).withMessage('password must have higher than 6 chars'),
+    .isLength({min:6}).withMessage('password must have at least 6 chars'),
     body('confirmPassword')
     .notEmpty().withMessage("confirmPassword  required")
-    .isLength({min:6}).withMessage('confirmPassword must have higher than 6 chars')
+    .isLength({min:6}).withMessage('confirmPassword must have at least 6 chars')
 ];
+
+const loginValidation =[
+    body('username')
+    .trim()
+    .notEmpty().withMessage("Username or email required")
+    .isLength({min:3}).withMessage("Username or email must have at least 3 characters"),
+
+    body('password')
+    .notEmpty().withMessage("password required")
+    .isLength({min:6}).withMessage("password must have at least 6 chars")
+] 
 
 module.exports = {
     createUserValidation,
+    loginValidation,
 }
