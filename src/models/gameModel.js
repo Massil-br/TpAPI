@@ -10,17 +10,20 @@ const gameSchema = new mongoose.Schema(
             trim:true,
             minlenghth:3,
             maxlenghth:100,
-            unique:true
         },
         platform:{
             type: String,
+            trim:true,
             required : true,
-            maxlength: 50
+            maxlength: 50,
+            minlength:2
         },
         genre:{
             type:String,
             require: true,
+            trim:true,
             maxlength: 100,
+            minlength:3
         },
         status:{
             type:String,

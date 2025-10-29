@@ -8,7 +8,7 @@ require('dotenv').config();
 
 
 const AuthRouter = require('./src/routes/authRouter');
-
+const GamesRouter = require('./src/routes/gameRouter');
 
 const app = express();
 app.use(express.json());
@@ -33,6 +33,7 @@ app.get("/", async(req, res)=>{
 })
 
 app.use("/auth", AuthRouter);
+app.use("/games", GamesRouter)
 
 app.use(errorHandler);
 app.use(notFoundHandler);
