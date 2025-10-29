@@ -1,30 +1,28 @@
 const mongoose = require("mongoose")
-const ObjectId = mongoose.Schema.ObjectId;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const reviewSchema = new mongoose.Schema(
     {
-        game:{
+        gameId:{
             type: ObjectId,
             ref:"Game",
             required:true,
         },
-        User:{
-            type:User,
+        UserId:{
+            type:ObjectId,
             required:true,
         },
-        Review:{
-            type:String,
-            required: false,
-            maxlegth: 300
-        },
-        stars:{
+        rating:{
             type: Number,
             required: true,
             min:1,
             max:5
-        }
-
-
+        },
+        comment:{
+            type:String,
+            required: false,
+            maxlegth: 300
+        },
     },
     {timestamps:true}
 )
