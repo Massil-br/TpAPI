@@ -28,7 +28,11 @@ const addGame = async(req, res) =>{
         genre,
         ownerId: user._id,
     })
-    await game.save();
+    try{
+        await game.save();
+    }catch(error){
+        throw new AppError("Can't create Game", 500);
+    }
     return res.status(201).json({
         message:"Game Successfully created",
         game,
@@ -78,9 +82,66 @@ const getGameById = async(req, res)=>{
     
 }
 
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+const modifyGame = async (req, res) =>{
+    const user = req.user;
+    if(!user){
+        throw new AppError("User not found", 403);
+    }
+
+
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        throw new AppError("Invalid object format", 400);
+    }   
+
+    const game = await Game.findById(req.params.id);
+
+    if(!game){
+        throw new AppError("game not found", 400);
+    }
+
+    if (game.ownerId.toString() != user._id.toString()){
+        console.log("ownerId :", game.ownerId);
+        console.log("userId: ", user._id);
+        throw new AppError("You don't have permission to modify this game", 403);
+    }
+
+    const {title, platform, genre} = req.body;
+    if (!title && !platform && !genre){
+        throw new AppError("Invalid input", 400);
+    }
+
+    if (title){
+        game.title = title;
+    }
+    if(platform){
+        game.platform = platform;
+    }
+    if(genre){
+        game.genre =genre;
+    }
+    try{
+        await game.save();
+    }catch(error){
+        throw new AppError("Can't save game", 500);
+    }
+
+    return res.status(200).json({
+        message:"Game Successfully modified",
+        game,
+    })
+
+}
+
 
 module.exports = {
     addGame,
     getGames,
-    getGameById
+    getGameById,
+    modifyGame
 }
