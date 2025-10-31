@@ -1,6 +1,8 @@
 
 const {AppError} = require('../utils/error')
 const Game = require('../models/gameModel');
+const res = require('express/lib/response');
+const mongoose = require('mongoose');
 
 /**
  * 
@@ -42,18 +44,43 @@ const addGame = async(req, res) =>{
  */
 const getGames = async (req, res) =>{
     const games = await Game.find();
-    console.log(games);
     if (!games){
         throw new AppError("cannot process games", 500);
     }
     return res.status(200).json({
         message:"list of games ",
         games:games,
-    })
+    });
+}
+
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+const getGameById = async(req, res)=>{
+
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        throw new AppError("Invalid object format", 400);
+    }   
+
+    const game = await Game.findById(req.params.id);
+    if (!game){
+        throw new AppError("cannot find game", 400);
+    }
+
+    return res.status(200).json({
+        message:"game found",
+        game: game,
+    });
+
+    
 }
 
 
 module.exports = {
     addGame,
     getGames,
+    getGameById
 }
