@@ -34,6 +34,26 @@ const addGame = async(req, res) =>{
 }
 
 
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+const getGames = async (req, res) =>{
+    const games = await Game.find();
+    console.log(games);
+    if (!games){
+        throw new AppError("cannot process games", 500);
+    }
+    return res.status(200).json({
+        message:"list of games ",
+        games:games,
+    })
+}
+
+
 module.exports = {
     addGame,
+    getGames,
 }
