@@ -106,8 +106,6 @@ const modifyGame = async (req, res) =>{
     }
 
     if (game.ownerId.toString() != user._id.toString()){
-        console.log("ownerId :", game.ownerId);
-        console.log("userId: ", user._id);
         throw new AppError("You don't have permission to modify this game", 403);
     }
 
@@ -138,10 +136,50 @@ const modifyGame = async (req, res) =>{
 
 }
 
+/**
+ * 
+ * @param {import("express").Request} req 
+ * @param {import("express").Response} res 
+ * @param {import("express").NextFunction} next 
+ */
+const deleteGame = async (req, res) =>{
+    const user = req.user;
+    if(!user){
+        throw new AppError("User not found", 403);
+    }
+
+
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        throw new AppError("Invalid object format", 400);
+    }   
+
+    const game = await Game.findById(req.params.id);
+
+    if(!game){
+        throw new AppError("game not found", 400);
+    }
+
+    if (game.ownerId.toString() != user._id.toString()){
+        throw new AppError("You don't have permission to modify this game", 403);
+    }
+
+    try{
+        await game.deleteOne();
+    }catch(error){
+        throw new AppError("Can't delete game", 500);
+    }
+
+    return res.status(200).json({
+        message:"Game Successfully deleted",
+    })
+
+}
+
 
 module.exports = {
     addGame,
     getGames,
     getGameById,
-    modifyGame
+    modifyGame,
+    deleteGame
 }
