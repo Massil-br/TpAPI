@@ -1,7 +1,6 @@
 
 const {AppError} = require('../utils/error')
 const Game = require('../models/gameModel');
-const res = require('express/lib/response');
 const mongoose = require('mongoose');
 
 /**

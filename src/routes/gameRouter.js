@@ -4,11 +4,14 @@ const {addGame,getGames,getGameById, modifyGame, deleteGame} = require('../contr
 const {addGameValidation, modifyGameValidation} = require('../schemas/gameValidation');
 const {validate}= require('../models/gameModel');
 const {authenticateUser} = require('../middlewares/authMiddleware');
-
+const {borrowGame,returnGame,getBorrowedGames} = require('../controllers/BorrowController');
 
 router.post('/',authenticateUser, addGame,  addGameValidation, validate);
 router.get('/',getGames);
 router.get('/:id',getGameById);
 router.put('/:id',authenticateUser,modifyGame, modifyGameValidation, validate );
 router.delete('/:id', authenticateUser, deleteGame);
+
+router.post('/:id/borrow', authenticateUser,borrowGame);
+router.post('/:id/return', authenticateUser, returnGame);
 module.exports = router;
